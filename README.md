@@ -25,6 +25,44 @@ The structure of the repository is as follows:
 └── requirements.txt # Required packages for running the autopatcher
 ```
 
+## Environment Setup
+
+
+
+To run the AutoPatcher, you need to install the required packages by running the following command:
+
+### Install a virtual environment
+```bash
+python3 -m venv .venv
+```
+
+### Activate the virtual environment
+```bash
+source .venv/bin/activate
+```
+
+### Install the required packages
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+#### Torch Installation
+
+The torch lib within the requirements.txt is a CPU version. If it is not working or there is a GPU available, you can install the GPU version of torch by following the instructions [here](https://pytorch.org/get-started/locally/). 
+
+### Download the fine-tuned model file
+
+You can download the fine-tuned model file `model.bin` from [Google Drive](https://drive.google.com/file/d/1odETLrot-tCNxUoDJsyLuGjGRwsICeZ9/view?usp=sharing) and save it in the `models` directory.
+
+
+### Run the AutoPatcher
+```bash
+python autopatcher.py --output_dir ./models --num_beams 1
+```
+> Note that the `--num_beams` parameter is used to control the number of beams for the beam search decoding. The default value is 1. 
+You can change it to a larger value to generate more patches if needed. But it is recommended to keep it as 1 for the best performance if you use the CPU for running the AutoPatcher. 
+
 
 ## Demo for AutoPatcher
 
