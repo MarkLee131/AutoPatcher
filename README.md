@@ -66,6 +66,12 @@ python autopatcher.py --output_dir ./models --num_beams 1
 
 #### Options
 
+You can check the available options by running the following command:
+
+```bash
+python autopatcher.py --help
+```
+
 > Note that the `--num_beams` parameter is used to control the number of beams for the beam search decoding. The default value is 1. 
 You can change it to a larger value to generate more patches if needed. But it is recommended to keep it as 1 for the best performance if you use the CPU for running the AutoPatcher. 
 

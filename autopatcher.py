@@ -24,12 +24,12 @@ class Code4Repair(Dataset):
     def __init__(self, tokenizer, args):
         
         # example_file = os.path.join(ROOT_DIR, 'data/demo_conti.csv')
-        example_file = os.path.join(ROOT_DIR, args.vuln4repair_path)
+        example_file = os.path.join(ROOT_DIR, args.vuln_path)
 
         sources = pd.read_csv(example_file)['source'].tolist()
-        print("Load data from csv file:", len(sources))
-        sources = sources[:8]
-        print("truncated data to:", len(sources))
+        print(f"Load vuln data from csv file: {example_file}, len = {len(sources)}")
+        # sources = sources[:8]
+        # print("truncated data to:", len(sources))
         
         self.examples = []
         for i in tqdm(range(len(sources))):
@@ -118,8 +118,8 @@ def main():
     parser.add_argument("--model_path", default=None, type=str, required=False,
                         help="The path to the model checkpoint for inference. If not specified, we will use the pretrained model from Huggingface.")
     
-    parser.add_argument("--vuln4repair_path", default="data/demo_conti.csv", type=str,
-                        help="Path to the input dataset for auto_patch.")
+    parser.add_argument("--vuln_path", default="data/demo_conti.csv", type=str,
+                        help="Path to the input dataset for auto_patch, which is a csv file with a column named 'source' containing the vulnerable code snippets.")
                         
     parser.add_argument("--eval_batch_size", default=1, type=int,
                         help="Batch size per GPU/CPU for evaluation.")
