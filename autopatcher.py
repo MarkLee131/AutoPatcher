@@ -106,7 +106,7 @@ def auto_patch(args, model, tokenizer, vuln4repair):
     results_df = pd.DataFrame(results)
             
     ## save the corresponding vuln_code and fix_code into csv file
-    save_dir = os.path.join(ROOT_DIR, "autopatch_results")
+    save_dir = os.path.join(ROOT_DIR, args.output_dir)
     os.makedirs(save_dir, exist_ok=True)
     results_df.to_csv(os.path.join(save_dir, "vuln_fix_pairs.csv"), index=False)
         
@@ -121,7 +121,10 @@ def main():
     parser.add_argument("--vuln_path", default="data/demo_conti.csv", type=str,
                         help="Path to the input dataset for auto_patch, which is a csv file with a column named 'source' containing the vulnerable code snippets.")
                         
-    parser.add_argument("--eval_batch_size", default=1, type=int,
+    parser.add_argument("--output_dir", default="autopatch_results", type=str, required=False,
+                        help="The output directory where the model predictions and checkpoints will be written.")
+    
+    parser.add_argument("--eval_batch_size", default=1, type=int, required=False,
                         help="Batch size per GPU/CPU for evaluation.")
     
     parser.add_argument("--encoder_block_size", default=512, type=int,

@@ -117,3 +117,4 @@ if __name__ == '__main__':
     functions = get_function_info_from_rca(rca_report_dir, project_dir)
     
     print(f"Total functions: {len(functions)}")
+    print(f"Function sample: {functions[0]}")
