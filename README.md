@@ -57,9 +57,15 @@ You can download the fine-tuned model file `model.bin` from [Google Drive](https
 
 
 ### Run the AutoPatcher
+
+#### Example usage
+
 ```bash
 python autopatcher.py --output_dir ./models --num_beams 1
 ```
+
+#### Options
+
 > Note that the `--num_beams` parameter is used to control the number of beams for the beam search decoding. The default value is 1. 
 You can change it to a larger value to generate more patches if needed. But it is recommended to keep it as 1 for the best performance if you use the CPU for running the AutoPatcher. 
 

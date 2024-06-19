@@ -23,7 +23,9 @@ class InputFeatures(object):
 class Code4Repair(Dataset):
     def __init__(self, tokenizer, args):
         
-        example_file = os.path.join(ROOT_DIR, 'data/demo_conti.csv')
+        # example_file = os.path.join(ROOT_DIR, 'data/demo_conti.csv')
+        example_file = os.path.join(ROOT_DIR, args.vuln4repair_path)
+
         sources = pd.read_csv(example_file)['source'].tolist()
         print("Load data from csv file:", len(sources))
         sources = sources[:8]
@@ -111,31 +113,37 @@ def auto_patch(args, model, tokenizer, vuln4repair):
 
 def main():
     parser = argparse.ArgumentParser()
-    # Params
-    parser.add_argument("--output_dir", default=None, type=str, required=False,
-                        help="The output directory where the model predictions and checkpoints will be written.")
-    # parser.add_argument("--model_type", default="t5", type=str,
-    #                     help="The model architecture to be fine-tuned.")
-    parser.add_argument("--encoder_block_size", default=512, type=int,
-                        help="Optional input sequence length after tokenization."
-                             "The training dataset will be truncated in block of this size for training."
-                             "Default to the model max input length for single sentence inputs (take into account special tokens).")
-    parser.add_argument("--decoder_block_size", default=256, type=int,
-                        help="Optional input sequence length after tokenization."
-                             "The training dataset will be truncated in block of this size for training."
-                             "Default to the model max input length for single sentence inputs (take into account special tokens).")
-    parser.add_argument("--num_beams", default=1, type=int,
-                        help="Beam size to use when decoding.") 
-    parser.add_argument("--config_name", default="", type=str,
-                        help="Optional pretrained config name or path")
 
+    # Params
+    parser.add_argument("--model_path", default=None, type=str, required=False,
+                        help="The path to the model checkpoint for inference. If not specified, we will use the pretrained model from Huggingface.")
+    
+    parser.add_argument("--vuln4repair_path", default="data/demo_conti.csv", type=str,
+                        help="Path to the input dataset for auto_patch.")
+                        
     parser.add_argument("--eval_batch_size", default=1, type=int,
                         help="Batch size per GPU/CPU for evaluation.")
+    
+    parser.add_argument("--encoder_block_size", default=512, type=int,
+                        help="Optional input sequence length after tokenization."
+                             "Default to the model max input length for single sentence inputs (take into account special tokens).")
+    
+    parser.add_argument("--decoder_block_size", default=256, type=int,
+                        help="Optional input sequence length after tokenization."
+                             "Default to the model max input length for single sentence inputs (take into account special tokens).")
+    
+    parser.add_argument("--num_beams", default=1, type=int,
+                        help="Beam size to use when decoding.") 
+    
+    parser.add_argument("--config_name", default="", type=str,
+                        help="Optional pretrained config name or path.")
+    
+
 
     args = parser.parse_args()
 
     # Setup CUDA, GPU
-    device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     args.n_gpu = 1
     args.device = device
 
@@ -153,10 +161,10 @@ def main():
     # Evaluation
     results = {}  
     
-    if args.output_dir:
+    if args.model_path:
         checkpoint_prefix = f'model.bin'
-        output_dir = os.path.join(args.output_dir, '{}'.format(checkpoint_prefix))  
-        model.load_state_dict(torch.load(output_dir, map_location=args.device))
+        model_path = os.path.join(args.model_path, '{}'.format(checkpoint_prefix))  
+        model.load_state_dict(torch.load(model_path, map_location=args.device))
     
     model.to(args.device)
     vuln4repair = Code4Repair(tokenizer, args)
