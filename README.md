@@ -33,7 +33,7 @@ To run the AutoPatcher, you need to install the required packages by running the
 
 ### Install a virtual environment
 ```bash
-python3 -m venv .venv
+python -m venv .venv
 ```
 
 ### Activate the virtual environment
@@ -44,8 +44,11 @@ source .venv/bin/activate
 ### Install the required packages
 
 ```bash
-python3 -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
+
+
+> The recommended Python version is `3.12.1` since the code has been tested on this version.
 
 #### Torch Installation
 
@@ -61,7 +64,7 @@ You can download the fine-tuned model file `model.bin` from [Google Drive](https
 #### Example usage
 
 ```bash
-python autopatcher.py --output_dir ./models --num_beams 1
+python autopatcher.py --model_path ./models --num_beams 1
 ```
 
 #### Options
@@ -71,6 +74,33 @@ You can check the available options by running the following command:
 ```bash
 python autopatcher.py --help
 ```
+
+The args currently supported are as follows:
+
+```bash
+usage: autopatcher.py [-h] [--model_path MODEL_PATH] [--vuln_path VULN_PATH] [--output_dir OUTPUT_DIR] [--eval_batch_size EVAL_BATCH_SIZE] [--encoder_block_size ENCODER_BLOCK_SIZE]
+                      [--decoder_block_size DECODER_BLOCK_SIZE] [--num_beams NUM_BEAMS] [--config_name CONFIG_NAME]
+
+options:
+  -h, --help            show this help message and exit
+  --model_path MODEL_PATH
+                        The path to the model checkpoint for inference. If not specified, we will use the pretrained model from Huggingface.
+  --vuln_path VULN_PATH
+                        Path to the input dataset for auto_patch, which is a csv file with a column named 'source' containing the vulnerable code snippets.
+  --output_dir OUTPUT_DIR
+                        The output directory where the model predictions and checkpoints will be written.
+  --eval_batch_size EVAL_BATCH_SIZE
+                        Batch size per GPU/CPU for evaluation.
+  --encoder_block_size ENCODER_BLOCK_SIZE
+                        Optional input sequence length after tokenization.Default to the model max input length for single sentence inputs (take into account special tokens).
+  --decoder_block_size DECODER_BLOCK_SIZE
+                        Optional input sequence length after tokenization.Default to the model max input length for single sentence inputs (take into account special tokens).
+  --num_beams NUM_BEAMS
+                        Beam size to use when decoding.
+  --config_name CONFIG_NAME
+                        Optional pretrained config name or path.
+```
+
 
 > Note that the `--num_beams` parameter is used to control the number of beams for the beam search decoding. The default value is 1. 
 You can change it to a larger value to generate more patches if needed. But it is recommended to keep it as 1 for the best performance if you use the CPU for running the AutoPatcher. 

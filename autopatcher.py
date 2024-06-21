@@ -115,7 +115,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     # Params
-    parser.add_argument("--model_path", default=None, type=str, required=False,
+    parser.add_argument("--model_path", default='models', type=str, required=False,
                         help="The path to the model checkpoint for inference. If not specified, we will use the pretrained model from Huggingface.")
     
     parser.add_argument("--vuln_path", default="data/demo_conti.csv", type=str, required=False,
