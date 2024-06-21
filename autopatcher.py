@@ -30,15 +30,15 @@ class Code4Repair(Dataset):
         # example_file = os.path.join(ROOT_DIR, 'data/demo_conti.csv')
         example_file = os.path.join(ROOT_DIR, args.vuln_path)
 
-        sources = pd.read_csv(example_file)['source'].tolist()
-        # print(f"Load vuln data from csv file: {example_file}, len = {len(sources)}")
-        msg.info(f"Load vuln data from csv file: {example_file}, len = {len(sources)}")
-        # sources = sources[:8]
-        # print("truncated data to:", len(sources))
+        vuln_code_list = pd.read_csv(example_file)['vuln_code'].tolist()
+        # print(f"Load vuln data from csv file: {example_file}, len = {len(vuln_code_list)}")
+        msg.info(f"Load vuln data from csv file: {example_file}, len = {len(vuln_code_list)}")
+        # vuln_code_lists = vuln_code_lists[:8]
+        # print("truncated data to:", len(vuln_code_lists))
         
         self.examples = []
-        for i in tqdm(range(len(sources))):
-            self.examples.append(convert_examples_to_features(sources[i], tokenizer, args))
+        for i in tqdm(range(len(vuln_code_lists))):
+            self.examples.append(convert_examples_to_features(vuln_code_lists[i], tokenizer, args))
 
     def __len__(self):
         return len(self.examples)
@@ -46,10 +46,10 @@ class Code4Repair(Dataset):
     def __getitem__(self, i):       
         return self.examples[i].input_ids, self.examples[i].input_ids.ne(0)
 
-def convert_examples_to_features(source, tokenizer, args):
+def convert_examples_to_features(vuln_code, tokenizer, args):
     # encode - subword tokenize
-    source_ids = tokenizer.encode(source, truncation=True, max_length=args.encoder_block_size, padding='max_length', return_tensors='pt')
-    return InputFeatures(source_ids)
+    vuln_code_ids = tokenizer.encode(vuln_code, truncation=True, max_length=args.encoder_block_size, padding='max_length', return_tensors='pt')
+    return InputFeatures(vuln_code_ids)
 
 
 def clean_tokens(tokens):
@@ -126,7 +126,7 @@ def main():
                         help="The path to the model checkpoint for inference. If not specified, we will use the pretrained model from Huggingface.")
     
     parser.add_argument("--vuln_path", default="data/demo_conti.csv", type=str, required=False,
-                        help="Path to the input dataset for auto_patch, which is a csv file with a column named 'source' containing the vulnerable code snippets.")
+                        help="Path to the input dataset for auto_patch, which is a csv file with a column named 'vuln_code' containing the vulnerable code snippets.")
                         
     parser.add_argument("--output_dir", default="autopatch_results", type=str, required=False,
                         help="The output directory where the model predictions and checkpoints will be written.")

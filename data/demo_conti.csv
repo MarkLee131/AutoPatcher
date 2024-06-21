@@ -1,4 +1,4 @@
-cwe_id,source,target,project_and_commit_id,cve_id,original_address,time
+cwe_id,vuln_code,fix_code,project_and_commit_id,cve_id,original_address,time
 CWE-416,"CWE-416 static void mark_context_stack ( mrb_state * mrb , struct mrb_context * c ) { size_t i ; <S2SV_StartBug> size_t e ; <S2SV_EndBug> if ( c -> stack == NULL ) return ; e = c -> stack - c -> stbase ; if ( c -> ci ) e += c -> ci -> nregs ; if ( c -> stbase + e > c -> stend ) e = c -> stend - c -> stbase ; for ( i = 0 ; i < e ; i ++ ) { mrb_value v = c -> stbase [ i ] ; if ( ! mrb_immediate_p ( v ) ) { <S2SV_StartBug> if ( mrb_basic_ptr ( v ) -> tt == MRB_TT_FREE ) { <S2SV_EndBug> c -> stbase [ i ] = mrb_nil_value ( ) ; } else { mrb_gc_mark ( mrb , mrb_basic_ptr ( v ) ) ; } } <S2SV_StartBug> } <S2SV_EndBug> }
 ","<S2SV_ModStart> ; size_t e ; mrb_value nil <S2SV_ModStart> ) ) { <S2SV_ModEnd> mrb_gc_mark ( mrb <S2SV_ModStart> ; } } e = c -> stend - c -> stbase ; nil = mrb_nil_value ( ) ; for ( ; i < e ; i ++ ) { c -> stbase [ i ] = nil ;
 ",mruby@mruby/5c114c91d4ff31859fcd84cf8bf349b737b90d99,CVE-2017-9527,https://github.com/mruby/mruby/commit/5c114c91d4ff31859fcd84cf8bf349b737b90d99,2017-06-11T17:29Z

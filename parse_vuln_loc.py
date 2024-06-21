@@ -1,6 +1,9 @@
+from __future__ import absolute_import, division, print_function
 import re
 import os
 from get_functions import *
+import argparse
+import pandas as pd
 
 from wasabi import Printer
 
@@ -111,31 +114,43 @@ def get_function_info_from_rca(rca_report_dir:str='./rca/rca_reports', project_d
         
     return function_list
         
+def main():
+    parser = argparse.ArgumentParser()
+     # Params
+    parser.add_argument("--rca_dir", default='rca/rca_reports', type=str, required=False,
+                        help="The path to the root cause analysis report directory. Default is `rca/rca_reports`.")
+    parser.add_argument("--project_dir", default='rca/mruby', type=str, required=False,
+                        help="The path to the project directory. Default is `rca/mruby`.")
+    parser.add_argument("--output_dir", default="data/", type=str, required=False,
+                        help="The output directory where the `vuln_functions.csv` file will be saved. Default is `data/`.")
+    args = parser.parse_args()
 
-if __name__ == '__main__':
-
-    project_dir = '/home/kaixuan/conti/AutoPatcher/rca/mruby'
+    functions = get_function_info_from_rca(args.rca_dir, args.project_dir)
     
-    rca_report_dir = './rca/rca_reports'
-    
-    functions = get_function_info_from_rca(rca_report_dir, project_dir)
-    
-    # print(f"Total functions: {len(functions)}")
-    
-    ### we want to order the functions by their length, and get the top 2 shortest functions
-    ### for functions[i], it is a tuple containing the function name, line number, file name, path rank, and code snippet
-    # functions = sorted(functions, key=lambda x: len(x[4]))
-    
-    # print(f"Function sample:\n {functions[0][4]}")
-    
-    functions = functions[:10]
+    functions = functions[:20]
     
     # sort the functions by the length of the code snippet
     functions = sorted(functions, key=lambda x: len(x[4]))
     msg.info(f"Total functions: {len(functions)}")
     msg.good(f"Function sample:\n {functions[0][4]}")
+
+    # save all the function snippets into a csv file, and the column name is 'vuln_code'
+    functions_df = pd.DataFrame(functions, columns=['function_name', 'line_number', 'file_name', 'path_rank', 'vuln_code'])
     
-    exit()
-    for i, function in enumerate(functions):
-        msg.info(f"Function {i+1}:\n {function[4]}")
+    # # length of the df should be the same as the length of the functions
+    # assert(len(functions_df) == len(functions), "Length of the dataframe is not the same as the length of the functions")
+    # print(len(functions_df))
+    
+    os.makedirs(args.output_dir, exist_ok=True)
+    functions_df.to_csv(os.path.join(args.output_dir, 'vuln_functions.csv'), index=False)
+    
+    msg.info(f"Vulnerable functions saved to {os.path.join(args.output_dir, 'vuln_functions.csv')}")
+    
+
+if __name__ == '__main__':
+
+    main()
+
+
+    
     
