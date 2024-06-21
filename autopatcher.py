@@ -58,8 +58,8 @@ def clean_tokens(tokens):
     tokens = tokens.replace("</s>", "")
     tokens = tokens.strip("\n")
     tokens = tokens.strip()
-    tokens = tokens.replace("<S2SV_ModStart>", "")
-    tokens = tokens.replace("<S2SV_ModEnd>", "")
+    # tokens = tokens.replace("<S2SV_ModStart>", "")
+    # tokens = tokens.replace("<S2SV_ModEnd>", "")
     tokens = tokens.replace("<S2SV_blank>", "")
     toekns = tokens.replace("<S2SV_null>", "")
     return tokens
@@ -68,13 +68,14 @@ def auto_patch(args, model, tokenizer, vuln4repair):
     # build dataloader
     vulns_sampler = SequentialSampler(vuln4repair)
     vulns_dataloader = DataLoader(vuln4repair, sampler=vulns_sampler, batch_size=args.eval_batch_size, num_workers=0)
+    
     # multi-gpu evaluate
     if args.n_gpu > 1:
         model = torch.nn.DataParallel(model)
     # Running!
-    logger.info("***** Running AutoPatch *****")
-    logger.info("  Num vulns = %d", len(vuln4repair))
-    logger.info("  Batch size = %d", args.eval_batch_size)
+    # logger.info("***** Running AutoPatch *****")
+    # logger.info("  Num vulns = %d", len(vuln4repair))
+    # logger.info("  Batch size = %d", args.eval_batch_size)
     
     model.eval()
     

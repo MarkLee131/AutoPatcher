@@ -2,6 +2,10 @@ import re
 import os
 from get_functions import *
 
+from wasabi import Printer
+
+msg = Printer()
+
 def parse_vuln_locations(file_path):
     '''
     parse the root cause analysis report file, and return a list of tuples containing the function name, line number, file name, and path rank
@@ -116,5 +120,22 @@ if __name__ == '__main__':
     
     functions = get_function_info_from_rca(rca_report_dir, project_dir)
     
-    print(f"Total functions: {len(functions)}")
-    print(f"Function sample: {functions[0]}")
+    # print(f"Total functions: {len(functions)}")
+    
+    ### we want to order the functions by their length, and get the top 2 shortest functions
+    ### for functions[i], it is a tuple containing the function name, line number, file name, path rank, and code snippet
+    # functions = sorted(functions, key=lambda x: len(x[4]))
+    
+    # print(f"Function sample:\n {functions[0][4]}")
+    
+    functions = functions[:10]
+    
+    # sort the functions by the length of the code snippet
+    functions = sorted(functions, key=lambda x: len(x[4]))
+    msg.info(f"Total functions: {len(functions)}")
+    msg.good(f"Function sample:\n {functions[0][4]}")
+    
+    exit()
+    for i, function in enumerate(functions):
+        msg.info(f"Function {i+1}:\n {function[4]}")
+    
