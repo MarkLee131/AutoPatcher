@@ -25,3 +25,4 @@ tree-sitter-c==0.21.4
 typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.1
+wasabi==1.1.3

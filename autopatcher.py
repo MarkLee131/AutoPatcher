@@ -11,6 +11,10 @@ import pandas as pd
 # ROOT_DIR = '/mnt/local/conti/VulRepair'
 ROOT_DIR = './'
 
+from wasabi import Printer
+
+msg = Printer()
+
 cpu_cont = 16
 logger = logging.getLogger(__name__)
 
@@ -27,7 +31,8 @@ class Code4Repair(Dataset):
         example_file = os.path.join(ROOT_DIR, args.vuln_path)
 
         sources = pd.read_csv(example_file)['source'].tolist()
-        print(f"Load vuln data from csv file: {example_file}, len = {len(sources)}")
+        # print(f"Load vuln data from csv file: {example_file}, len = {len(sources)}")
+        msg.info(f"Load vuln data from csv file: {example_file}, len = {len(sources)}")
         # sources = sources[:8]
         # print("truncated data to:", len(sources))
         
@@ -99,7 +104,8 @@ def auto_patch(args, model, tokenizer, vuln4repair):
             for beam_index in range(start_index, end_index):
                 prediction = tokenizer.decode(beam_outputs[beam_index], skip_special_tokens=False)
                 clean_prediction = clean_tokens(prediction)
-                print(clean_prediction)
+                # print(clean_prediction)
+                msg.good(clean_prediction)
                 results.append({"vuln_code": vuln_code, "fix_code": clean_prediction})
                 
     # save the results for each vuln_code according to the num_beams
@@ -141,26 +147,31 @@ def main():
     parser.add_argument("--config_name", default="", type=str, required=False,
                         help="Optional pretrained config name or path.")
     
+    parser.add_argument("--n_gpu", default=1, type=int, required=False,
+                        help="Number of GPUs to use.")
+    
 
 
     args = parser.parse_args()
 
     # Setup CUDA, GPU
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    args.n_gpu = 1
+    # args.n_gpu = 1
     args.device = device
 
     # Setup logging
-    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',datefmt='%m/%d/%Y %H:%M:%S',level=logging.INFO)
-    logger.warning("device: %s, n_gpu: %s",device, args.n_gpu,)
+    # logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',datefmt='%m/%d/%Y %H:%M:%S',level=logging.INFO)
+    # logger.warning("device: %s, n_gpu: %s",device, args.n_gpu,)
+    # msg.warn("device: %s, n_gpu: %s",device, args.n_gpu)
 
     tokenizer = RobertaTokenizer.from_pretrained('MickyMike/VulRepair')
     tokenizer.add_tokens(["<S2SV_StartBug>", "<S2SV_EndBug>", "<S2SV_blank>", "<S2SV_ModStart>", "<S2SV_ModEnd>"])
     model = T5ForConditionalGeneration.from_pretrained('MickyMike/VulRepair') 
     model.resize_token_embeddings(len(tokenizer))
 
-    logger.info("Running AUtoPatch with parameters %s", args)
-
+    # logger.info("Running AutoPatch with parameters %s", args)
+    msg.warn(f"Running AutoPatch with parameters {args}")
+    
     # Evaluation
     results = {}  
     
