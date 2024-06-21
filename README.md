@@ -10,8 +10,8 @@ The structure of the repository is as follows:
 ├── autopatch_results # Directory for storing the patched files
 │   └── vuln_fix_pairs.csv # CSV file containing the vulnerability and the corresponding patch
 ├── data ## Directory for storing the data
-│   ├── demo_conti.csv # CSV file containing some CVEs for demonstration, feeding into the autopatcher
-│   └── demo_cve.csv # also a CSV file containing some CVEs for demonstration, feeding into the autopatcher
+│   └──demo_conti.csv # CSV file containing some CVEs for demonstration, feeding into the autopatcher
+│   └──vuln_functions.csv # CSV file containing the vulnerable code snippets extracted from the C/C++ code (output of the parse_vuln_loc.py script)
 ├── get_functions.py # Script for extracting functions from the C/C++ code by using tree-sitter
 ├── LICENSE
 ├── models ## Directory for storing the fine-tuned model (CodeT5)
