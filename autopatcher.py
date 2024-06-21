@@ -37,8 +37,8 @@ class Code4Repair(Dataset):
         # print("truncated data to:", len(vuln_code_lists))
         
         self.examples = []
-        for i in tqdm(range(len(vuln_code_lists))):
-            self.examples.append(convert_examples_to_features(vuln_code_lists[i], tokenizer, args))
+        for i in tqdm(range(len(vuln_code_list))):
+            self.examples.append(convert_examples_to_features(vuln_code_list[i], tokenizer, args))
 
     def __len__(self):
         return len(self.examples)
