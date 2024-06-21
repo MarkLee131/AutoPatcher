@@ -118,7 +118,7 @@ def main():
     parser.add_argument("--model_path", default=None, type=str, required=False,
                         help="The path to the model checkpoint for inference. If not specified, we will use the pretrained model from Huggingface.")
     
-    parser.add_argument("--vuln_path", default="data/demo_conti.csv", type=str,
+    parser.add_argument("--vuln_path", default="data/demo_conti.csv", type=str, required=False,
                         help="Path to the input dataset for auto_patch, which is a csv file with a column named 'source' containing the vulnerable code snippets.")
                         
     parser.add_argument("--output_dir", default="autopatch_results", type=str, required=False,
@@ -135,10 +135,10 @@ def main():
                         help="Optional input sequence length after tokenization."
                              "Default to the model max input length for single sentence inputs (take into account special tokens).")
     
-    parser.add_argument("--num_beams", default=1, type=int,
+    parser.add_argument("--num_beams", default=1, type=int, required=False,
                         help="Beam size to use when decoding.") 
     
-    parser.add_argument("--config_name", default="", type=str,
+    parser.add_argument("--config_name", default="", type=str, required=False,
                         help="Optional pretrained config name or path.")
     
 
