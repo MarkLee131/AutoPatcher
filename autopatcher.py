@@ -170,8 +170,8 @@ def main():
     model = T5ForConditionalGeneration.from_pretrained('MickyMike/VulRepair') 
     model.resize_token_embeddings(len(tokenizer))
 
-    # logger.info("Running AutoPatch with parameters %s", args)
-    msg.warn(f"Running AutoPatch with parameters {args}")
+    # logger.info("Running AutoPatcher with parameters %s", args)
+    msg.warn(f"Running AutoPatcher with parameters {args}")
     
     # Evaluation
     results = {}  
