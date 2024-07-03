@@ -1,6 +1,53 @@
 # AutoPatcher
 AutoPatcher: Automatic Root-Cause-Analysis Guided Program Repair via Large Language Models
 
+---
+There are two ways to run the AutoPatcher:
+1. **Docker Usage**: You can run the AutoPatcher in a Docker container by following the instructions in the [Docker Usage](#docker-usage) section.
+
+2. **Local Usage**: You can run the AutoPatcher on your local machine by following the instructions in the [Local Usage](#local-usage) section.
+
+---
+1. Docker Usage
+
+## Steps to run the AutoPatcher in a Docker container
+
+### Step 1: Clone the repository
+
+```bash
+git clone https://github.com/MarkLee131/AutoPatcher.git
+cd AutoPatcher
+```
+
+### Step 2: Build the Docker image
+
+```bash
+docker build -t autopatcher .
+```
+
+### Step 3: Run the Docker container
+
+#### Example usage
+
+```bash
+docker run -it --name myautopatcher autopatcher 
+```
+
+This command will start the Docker container named `myautopatcher` and run the autopatcher.py by default to generate patches for the CVE code snippets in the `data/demo_conti.csv` file.
+
+#### Usage with a bash shell
+
+You can also open a bash shell inside the Docker container by running the following command:
+
+```bash
+docker run -it --name myautopatcher autopatcher /bin/bash
+```
+
+This command will start the Docker container named `myautopatcher` and open a bash shell inside the container to use the `parse_vuln_loc.py` and `autopatcher.py` scripts manually. The detailed usage of the scripts can be found in the [Local Usage](#local-usage) section.
+
+---
+2. Local Usage
+
 ## Structure
 The structure of the repository is as follows:
 
