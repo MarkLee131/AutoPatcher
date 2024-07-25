@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
+# download submodules
+RUN git submodule init && git submodule update
+
 # Install virtualenv and dependencies in the container
 RUN pip install --upgrade pip && \
 pip install --no-cache-dir -r requirements.txt
