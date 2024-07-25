@@ -17,6 +17,9 @@ There are two ways to run the AutoPatcher:
 ```bash
 git clone https://github.com/MarkLee131/AutoPatcher.git
 cd AutoPatcher
+
+git submodule init # Initialize the submodules
+git submodule update # Update the submodules, otherwise the mruby folder will be empty
 ```
 
 ### Step 2: Build the Docker image
