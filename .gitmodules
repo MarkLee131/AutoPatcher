@@ -1,0 +1,3 @@
+[submodule "rca/mruby"]
+	path = rca/mruby
+	url = https://github.com/mruby/mruby.git
