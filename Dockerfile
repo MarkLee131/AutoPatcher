@@ -16,6 +16,8 @@ RUN apt-get update && \
 # download submodules
 RUN git submodule init && git submodule update
 
+RUN git checkout e340b17
+
 # Install virtualenv and dependencies in the container
 RUN pip install --upgrade pip && \
 pip install --no-cache-dir -r requirements.txt
