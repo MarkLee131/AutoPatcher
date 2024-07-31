@@ -30,7 +30,7 @@ def parse_vuln_locations(file_path):
                     vuln_locations[key] = (function_name, line_number, file_name, path_rank)
 
     # Convert the dictionary values to a list and sort
-    sorted_vuln_locations = sorted(vuln_locations.values(), key=lambda x: (-x[3], x[0], x[1], x[2]))
+    sorted_vuln_locations = sorted(vuln_locations.values(), key=lambda x: (x[3], x[0], x[1], x[2]))
 
     return sorted_vuln_locations
 
@@ -98,8 +98,8 @@ def get_function_info_from_rca(rca_report_dir:str='./rca/rca_reports', project_d
                 
                 # filter out the function snippet with path rank higher than 1.0
                 # if vuln[2] == 'vm.c' and int(vuln[1]) >= 1100 and int(vuln[1]) <= 1250:
-                if vuln[3] >= 0.5:
-                    function_list.append((vuln[0], vuln[1], vuln[2], vuln[3], code_snippet))
+                # if vuln[3] >= 0.5:
+                function_list.append((vuln[0], vuln[1], vuln[2], vuln[3], code_snippet))
                 # print(f"Function Name: {vuln[0]}\nLine Number: {vuln[1]}\nFile Name: {vuln[2]}\nPath Rank: {vuln[3]}\n {code_snippet}\n")
                     # print(f"Function Name: {vuln[0]}\nLine Number: {vuln[1]}\nPath Rank: {vuln[3]}\n")
                 
