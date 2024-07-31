@@ -11,26 +11,29 @@ msg = Printer()
 
 def parse_vuln_locations(file_path):
     '''
-    parse the root cause analysis report file, and return a list of tuples containing the function name, line number, file name, and path rank
+    Parse the root cause analysis report file, and return a list of tuples containing the function name, line number,
+    file name, path rank, and the additional digit.
     '''
     vuln_locations = {}
 
     with open(file_path, 'r') as file:
         for line in file:
-            match = re.search(r'-- (.+) \(path rank: ([0-9.]+)\) //(\w+) at (\S+):(\d+)', line)
+            # Extended regex to capture the additional digit
+            match = re.search(r'-- (.+) -- ([0-9]+) -- (.+) \(path rank: ([0-9.]+)\) //(\w+) at (\S+):(\d+)', line)
             if match:
-                path_rank = float(match.group(2))
-                function_name = match.group(3)
-                file_name = match.group(4)
-                line_number = match.group(5)
+                path_rank = float(match.group(4))
+                digit = int(match.group(2))  # Capture the additional digit
+                function_name = match.group(5)
+                file_name = match.group(6)
+                line_number = match.group(7)
                 key = (line_number, file_name)
                 
                 # Only add or replace the entry if the new path rank is higher
                 if key not in vuln_locations:
-                    vuln_locations[key] = (function_name, line_number, file_name, path_rank)
+                    vuln_locations[key] = (function_name, line_number, file_name, path_rank, digit)
 
     # Convert the dictionary values to a list and sort
-    sorted_vuln_locations = sorted(vuln_locations.values(), key=lambda x: (x[3], x[0], x[1], x[2]))
+    sorted_vuln_locations = sorted(vuln_locations.values(), key=lambda x: (-x[4], x[3], x[0], x[1], x[2]))
 
     return sorted_vuln_locations
 
@@ -99,7 +102,7 @@ def get_function_info_from_rca(rca_report_dir:str='./rca/rca_reports', project_d
                 # filter out the function snippet with path rank higher than 1.0
                 # if vuln[2] == 'vm.c' and int(vuln[1]) >= 1100 and int(vuln[1]) <= 1250:
                 # if vuln[3] >= 0.5:
-                function_list.append((vuln[0], vuln[1], vuln[2], vuln[3], code_snippet))
+                function_list.append((vuln[0], vuln[1], vuln[2], vuln[3], vuln[4], code_snippet))
                 # print(f"Function Name: {vuln[0]}\nLine Number: {vuln[1]}\nFile Name: {vuln[2]}\nPath Rank: {vuln[3]}\n {code_snippet}\n")
                     # print(f"Function Name: {vuln[0]}\nLine Number: {vuln[1]}\nPath Rank: {vuln[3]}\n")
                 
@@ -127,12 +130,12 @@ def main():
 
     functions = get_function_info_from_rca(args.rca_dir, args.project_dir)
     
-    functions = functions[:20]
+    functions = functions[:10]
     
     # sort the functions by the length of the code snippet
-    functions = sorted(functions, key=lambda x: len(x[4]))
+    functions = sorted(functions, key=lambda x: len(x[5]))
     msg.info(f"Total functions: {len(functions)}")
-    msg.good(f"Function sample:\n {functions[0][4]}")
+    msg.good(f"Function sample:\n {functions[0][5]}")
 
     # save all the function snippets into a csv file, and the column name is 'vuln_code'
     functions_df = pd.DataFrame(functions, columns=['function_name', 'line_number', 'file_name', 'path_rank', 'vuln_code'])
