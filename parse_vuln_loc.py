@@ -138,7 +138,7 @@ def main():
     msg.good(f"Function sample:\n {functions[0][5]}")
 
     # save all the function snippets into a csv file, and the column name is 'vuln_code'
-    functions_df = pd.DataFrame(functions, columns=['function_name', 'line_number', 'file_name', 'path_rank', 'vuln_code'])
+    functions_df = pd.DataFrame(functions, columns=['function_name', 'line_number', 'file_name', 'path_rank', 'likelihood', 'vuln_code'])
     
     # # length of the df should be the same as the length of the functions
     # assert(len(functions_df) == len(functions), "Length of the dataframe is not the same as the length of the functions")
