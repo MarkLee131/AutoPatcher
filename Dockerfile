@@ -1,6 +1,8 @@
 # Use an Ubuntu base image
 FROM python:3.12.1-slim
 
+RUN mkdir vol
+
 # Set the working directory to /app/AutoPatcher
 WORKDIR /app
 
