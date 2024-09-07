@@ -1,0 +1,71 @@
+cwe_id,vuln_code,target,project_and_commit_id,cve_id,original_address,time
+CWE-119,"void ClientSideClass::temperature_changer(s_temperature_modifier *temp_mod_ptr)
+{
+    printf(""I am inside the original temperature changer \n"");
+    printf(""bytesread inside orig temp change %ld \n"", temp_mod_ptr->bytesRead);
+    memcpy(&temp_mod_ptr->temperatureChangeIndicator, &temp_mod_ptr->buffer[1], (ssize_t)4 * (temp_mod_ptr->bytesRead)); // This line causes the buffer overflow when malicious code is sent. this is unpatched
+    temp_mod_ptr->temperature_control = static_cast<int>(temp_mod_ptr->temperatureChangeIndicator);     // static_cast<int>(buffer[1]);
+    //printf(""temp indicator inside orig temp change %d \n"", temperatureChangeIndicator);
+    //printf(""temp control inside orig temp change %d \n"", *temperature_control);
+}","void ClientSideClass::temperature_changer(s_temperature_modifier *temp_mod_ptr)
+{
+    printf(""I am inside the original temperature changer \n"");
+    printf(""bytesread inside orig temp change %ld \n"", temp_mod_ptr->bytesRead);
+<S2SV_ModStart>    if (temp_mod_ptr->bytesRead <= 2)<S2SV_ModEnd>
+<S2SV_ModStart>    {<S2SV_ModEnd>
+<S2SV_ModStart>        memcpy(&temp_mod_ptr->temperatureChangeIndicator, &temp_mod_ptr->buffer[1], (ssize_t)temp_mod_ptr->bytesRead);<S2SV_ModEnd>   // This line causes the buffer overflow when malicious code is sent. this is unpatched     
+<S2SV_ModStart>        temp_mod_ptr->temperature_control = (int)(temp_mod_ptr->temperatureChangeIndicator);<S2SV_ModEnd>     // static_cast<int>(buffer[1]);
+<S2SV_ModStart>    }<S2SV_ModEnd>
+    //printf(""temp indicator inside orig temp change %d \n"", temperatureChangeIndicator);
+    //printf(""temp control inside orig temp change %d \n"", *temperature_control);
+}",not_applicable,not_applicable,not_applicable,not_applicable
+CWE-119,"void ClientSideClass::temperature_changer(s_temperature_modifier *temp_mod_ptr)
+{
+    printf(""I am inside the original temperature changer \n"");
+    printf(""bytesread inside orig temp change %ld \n"", temp_mod_ptr->bytesRead);
+    memcpy(&temp_mod_ptr->temperatureChangeIndicator, &temp_mod_ptr->buffer[1], (ssize_t)4 * (temp_mod_ptr->bytesRead));
+    temp_mod_ptr->temperature_control = static_cast<int>(temp_mod_ptr->temperatureChangeIndicator);
+}","void ClientSideClass::temperature_changer(s_temperature_modifier *temp_mod_ptr)
+{
+    printf(""I am inside the original temperature changer \n"");
+    printf(""bytesread inside orig temp change %ld \n"", temp_mod_ptr->bytesRead);
+<S2SV_ModStart>    if (temp_mod_ptr->bytesRead <= 2)<S2SV_ModEnd>
+<S2SV_ModStart>    {<S2SV_ModEnd>
+<S2SV_ModStart>        memcpy(&temp_mod_ptr->temperatureChangeIndicator, &temp_mod_ptr->buffer[1], (ssize_t)temp_mod_ptr->bytesRead);<S2SV_ModEnd>        
+<S2SV_ModStart>        temp_mod_ptr->temperature_control = (int)(temp_mod_ptr->temperatureChangeIndicator);<S2SV_ModEnd>
+<S2SV_ModStart>    }<S2SV_ModEnd>
+
+}",not_applicable,not_applicable,not_applicable,not_applicable
+CWE-119,"void ClientSideClass::temperature_changer(s_temperature_modifier *temp_mod_ptr)
+{
+    memcpy(&temp_mod_ptr->temperatureChangeIndicator, &temp_mod_ptr->buffer[1], (ssize_t)4 * (temp_mod_ptr->bytesRead));
+    temp_mod_ptr->temperature_control = static_cast<int>(temp_mod_ptr->temperatureChangeIndicator);
+}","void ClientSideClass::temperature_changer(s_temperature_modifier *temp_mod_ptr)
+{
+<S2SV_ModStart>    if (temp_mod_ptr->bytesRead <= 2)<S2SV_ModEnd>
+<S2SV_ModStart>    {<S2SV_ModEnd>
+<S2SV_ModStart>        memcpy(&temp_mod_ptr->temperatureChangeIndicator, &temp_mod_ptr->buffer[1], (ssize_t)temp_mod_ptr->bytesRead);<S2SV_ModEnd>        
+<S2SV_ModStart>        temp_mod_ptr->temperature_control = (int)(temp_mod_ptr->temperatureChangeIndicator);<S2SV_ModEnd>
+<S2SV_ModStart>    }<S2SV_ModEnd>
+
+}",not_applicable,not_applicable,not_applicable,not_applicable
+CWE-119,"CWE-119void ClientSideClass::temperature_changer(s_temperature_modifier *temp_mod_ptr)
+{
+    printf(""I am inside the original temperature changer \n"");
+    printf(""bytesread inside orig temp change %ld \n"", temp_mod_ptr->bytesRead);
+    memcpy(&temp_mod_ptr->temperatureChangeIndicator, &temp_mod_ptr->buffer[1], (ssize_t)4 * (temp_mod_ptr->bytesRead)); // This line causes the buffer overflow when malicious code is sent. this is unpatched
+    temp_mod_ptr->temperature_control = static_cast<int>(temp_mod_ptr->temperatureChangeIndicator);     // static_cast<int>(buffer[1]);
+    //printf(""temp indicator inside orig temp change %d \n"", temperatureChangeIndicator);
+    //printf(""temp control inside orig temp change %d \n"", *temperature_control);
+}","void ClientSideClass::temperature_changer(s_temperature_modifier *temp_mod_ptr)
+{
+    printf(""I am inside the original temperature changer \n"");
+    printf(""bytesread inside orig temp change %ld \n"", temp_mod_ptr->bytesRead);
+<S2SV_ModStart>    if (temp_mod_ptr->bytesRead <= 2)<S2SV_ModEnd>
+<S2SV_ModStart>    {<S2SV_ModEnd>
+<S2SV_ModStart>        memcpy(&temp_mod_ptr->temperatureChangeIndicator, &temp_mod_ptr->buffer[1], (ssize_t)temp_mod_ptr->bytesRead);<S2SV_ModEnd>   // This line causes the buffer overflow when malicious code is sent. this is unpatched     
+<S2SV_ModStart>        temp_mod_ptr->temperature_control = (int)(temp_mod_ptr->temperatureChangeIndicator);<S2SV_ModEnd>     // static_cast<int>(buffer[1]);
+<S2SV_ModStart>    }<S2SV_ModEnd>
+    //printf(""temp indicator inside orig temp change %d \n"", temperatureChangeIndicator);
+    //printf(""temp control inside orig temp change %d \n"", *temperature_control);
+}",not_applicable,not_applicable,not_applicable,not_applicable
